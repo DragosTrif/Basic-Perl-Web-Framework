@@ -1,6 +1,6 @@
 _ Basic-Perl-Web-Framework _
 
-This script generates a basic Web-Framework wich follows Model-view-controller patterns
+This script generates a basic Web-Framework which follows Model-view-controller patterns
 
 #Todo#
 1. Add Getopt::Long
