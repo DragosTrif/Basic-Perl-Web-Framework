@@ -1,8 +1,7 @@
 use strict;
 use warnings;
 
-my $liteapp =
-  SinglePageAplication->new( { name => 'test' } );
+my $liteapp = SinglePageAplication->new({ name => 'test' });
 
 $liteapp->create_file_path();
 $liteapp->generate_files();
@@ -33,7 +32,7 @@ $liteapp->generate_files();
 
     my $class = ref $self;
 
-    my $name        = delete $arg_for{name};
+    my $name = delete $arg_for{name};
 
     unless ( defined $name ) {
       croak("$class requires a name and parent_name to be set");
@@ -45,16 +44,14 @@ $liteapp->generate_files();
     $self->{class_names}->{app}     = $self->{name};
     $self->{class_names}->{modells} = 'DataHandler';
     $self->{class_names}->{controllers} = sprintf( "Render%s", $self->{name} );
-    $self->{class_names}->{views} = 'main';
-    $self->{class_names}->{base} = 'BaseRenderer';
+    $self->{class_names}->{views}       = 'main';
+    $self->{class_names}->{base}        = 'BaseRenderer';
   }
 
   sub generate_files {
     my $self = shift;
 
     my $file_name = $self->{class_names};
-    #print Dumper($self->{file_path});
-    #die;
 
     foreach my $path ( keys %{ $self->{file_path} } ) {
       my $exetension = 'pm';
@@ -91,22 +88,18 @@ $liteapp->generate_files();
   sub _generate_file_path_name {
     my $self = shift;
 
-    my $dir       = 'Controller';
-    my $views_dir = 'Templates';
-    my $app_name  = $self->{name};
+    my $dir            = 'Controller';
+    my $views_dir      = 'Templates';
+    my $app_name       = $self->{name};
     my $base_class_dir = 'Lib';
 
     my $config = {
-      app     => File::Spec->catdir( $app_name, $dir),
+      app     => File::Spec->catdir( $app_name, $dir ),
       modells => File::Spec->catdir( $app_name, 'Modell' ),
-      views => File::Spec->catdir( $app_name, $views_dir ),
-      base => File::Spec->catdir( $app_name, $base_class_dir ),
+      views   => File::Spec->catdir( $app_name, $views_dir ),
+      base    => File::Spec->catdir( $app_name, $base_class_dir ),
     };
 
-    
-
-    # Do i realy need this name space?
-    # $config->{controllers} = "$main_app/$dir/$app_name/controllers";
     return $config;
   }
 
@@ -143,7 +136,7 @@ CODE
     }
   );
 CODE
-    
+
     my $dispatch = <<'CODE';
   my $self = shift;
   my $params = shift;
@@ -169,7 +162,7 @@ CODE
   $tt->process(\$tempate_code, $vars) // die $Template::ERROR;
   
 CODE
-    
+
     my $config = {
       render_main      => $render_main_method,
       say_hello        => $say_hello,
@@ -187,13 +180,12 @@ CODE
 
     my $class_config = {
       app => {
-        class =>
-          sprintf( '%s::%s', 'Controller', $self->{name} ),
+        class           => sprintf( '%s::%s', 'Controller', $self->{name} ),
         superclass      => 'BaseRenderer',
         superclass_path => 'lib1',
-        modell          => $self->{class_names}->{modells},
-        modell_path     => $self->{file_path}->{modells},
-        attributes      => [
+        modell      => $self->{class_names}->{modells},
+        modell_path => $self->{file_path}->{modells},
+        attributes  => [
           {
             name    => '+views',
             default => sprintf( "'%s'", $self->{file_path}->{views} )
@@ -231,7 +223,7 @@ CODE
         attributes => [
           {
             name    => 'views',
-            default => sprintf("'%s'", 'test/Templates'),
+            default => sprintf( "'%s'", 'test/Templates' ),
           }
         ],
         methods => [
@@ -334,7 +326,7 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 TEMPLATE
-    
+
     my $config = {
       app     => $app,
       modells => $model_template,
