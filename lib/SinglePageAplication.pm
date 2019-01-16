@@ -100,71 +100,17 @@ sub _get_method_code {
   my $self   = shift;
   my %params = (@_);
 
-  my $render_main_method = <<'CODE';
-my $self = shift;
-my $params = shift;
-
-$self->_render_template(
-  "main.tt",
-  {
-  }
-);
-CODE
-
-  my $say_hello = <<'CODE';
-my $self = shift;
-my %params = (@_);
-
-return "Hello $params{name}";
-CODE
-
-  my $render_say_hello = <<'CODE';
-my $self = shift;
-my $params = shift;
-
-$self->_render_template(
-  "main.tt",
-  {
-    hello => $self->say_hello(),
-  }
-);
-CODE
-
-  my $dispatch = <<'CODE';
-my $self = shift;
-my $params = shift;
-
-my $route = $params->{action} // 'render_main';
-
-$self->$route($params);
-CODE
-  my $render_template = <<'CODE';
-my $self = shift;
-my $file = shift;
-my $vars = shift;
-
-my $folder = $self->views();
-
-my $tt = Template->new({
-  INCLUDE_PATH => "$folder",
-  EVAL_PERL    => 1,
-}) || die $Template::ERROR, "\n";
-
-my $tempate_code = read_file("$folder/$file");
-
-$tt->process(\$tempate_code, $vars) // die $Template::ERROR;
-
-CODE
-
   my $config = {
-    render_main      => $render_main_method,
-    say_hello        => $say_hello,
-    render_say_hello => $render_say_hello,
-    dispatch         => $dispatch,
-    _render_template => $render_template,
+    render_main      => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'render_main.tt'),
+    say_hello        => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'say_hello.tt'),
+    render_say_hello => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'render_say_hello.tt'),
+    dispatch         => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'dispatch.tt'),
+    _render_template => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'render_template.tt'),
   };
 
-  return $config->{ $params{code} };
+  my $code = read_file($config->{ $params{code} });
+  
+  return $code;
 }
 
 sub generate_class_code {
