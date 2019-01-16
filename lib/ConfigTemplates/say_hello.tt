@@ -1,0 +1,4 @@
+my $self = shift;
+my %params = (@_);
+
+return "Hello $params{name}";

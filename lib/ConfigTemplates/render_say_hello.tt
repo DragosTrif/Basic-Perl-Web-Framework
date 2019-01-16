@@ -1,0 +1,9 @@
+my $self = shift;
+my $params = shift;
+
+$self->_render_template(
+  "main.tt",
+  {
+    hello => $self->say_hello(),
+  }
+);

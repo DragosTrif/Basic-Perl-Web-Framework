@@ -1,0 +1,6 @@
+my $self = shift;
+my $params = shift;
+
+my $route = $params->{action} // 'render_main';
+
+$self->$route($params);
