@@ -1,0 +1,20 @@
+package [% class %];
+
+use Moo;
+
+use Template;
+use File::Slurp 'read_file';
+
+[% FOREACH a IN attributes %]
+has [% a.name %] => (is => "ro", default => sub {[% a.default %]});
+[% END %]
+
+[% FOREACH m IN methods %]
+sub [% m.name %] {
+[% m.body %]
+}
+[% END %]
+
+__PACKAGE__->meta->make_immutable;
+
+1;

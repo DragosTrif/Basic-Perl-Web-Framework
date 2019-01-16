@@ -1,0 +1,5 @@
+<form>
+<input type="text" name="name" value="Mickey">
+<input type="hidden" name="action" value="render_say_hello">
+<input type="submit" value="Submit">
+<form>
