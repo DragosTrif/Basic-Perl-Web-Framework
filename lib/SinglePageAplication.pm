@@ -8,6 +8,7 @@ use File::Path qw(make_path);
 use File::Spec;
 use Carp qw(croak carp);
 use Template::Tiny;
+use File::Slurp 'read_file';
 use autodie;
 
 sub new {
@@ -37,6 +38,7 @@ sub _initialize {
   $self->{class_names}->{controllers} = sprintf( "Render%s", $self->{name} );
   $self->{class_names}->{views}       = 'main';
   $self->{class_names}->{base}        = 'BaseRenderer';
+  $self->{ConfigTemplates}            = 'ConfigTemplates';
 }
 
 sub generate_files {
@@ -241,91 +243,14 @@ sub _get_class_template_input {
   my $self   = shift;
   my %params = (@_);
 
-  my $app = <<"Class";
-package [% class %];
-
-use Moo;
-
-use lib "[% superclass_path %]";
-extends "[% superclass %]";
-
-use lib "[% modell_path %]";
-use [% modell %];
-
-[% FOREACH a IN attributes %]
-has [% a.name %] => (is => "ro", default => sub {[% a.default %]});
-[% END %]
-
-[% FOREACH m IN methods %]
-sub [% m.name %] {
-[% m.body %]
-}
-[% END %]
-
-__PACKAGE__->meta->make_immutable;
-
-1;
-Class
-  my $model_template = <<"TEMPLATE";
-package [% class %];
-
-use Moo;
-
-[% FOREACH a IN attributes %]
-has [% a.name %] => (is => "ro", default => sub {[% a.default %]});
-[% END %]
-
-[% FOREACH m IN methods %]
-sub [% m.name %] {
-[% m.body %]
-}
-[% END %]
-
-__PACKAGE__->meta->make_immutable;
-
-1;
-
-TEMPLATE
-
-  my $initial_form = <<TEMPLATE;
-<form>
-<input type="text" name="name" value="Mickey">
-<input type="hidden" name="action" value="render_say_hello">
-<input type="submit" value="Submit">
-<form>
-TEMPLATE
-
-  my $base_template = <<TEMPLATE;
-  package [% class %];
-
-use Moo;
-
-use Template;
-use File::Slurp 'read_file';
-
-[% FOREACH a IN attributes %]
-has [% a.name %] => (is => "ro", default => sub {[% a.default %]});
-[% END %]
-
-[% FOREACH m IN methods %]
-sub [% m.name %] {
-[% m.body %]
-}
-[% END %]
-
-__PACKAGE__->meta->make_immutable;
-
-1;
-TEMPLATE
-
   my $config = {
-    app     => $app,
-    modells => $model_template,
-    views   => $initial_form,
-    base    => $base_template,
+    app     => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'controller.tt'),
+    modells => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'model.tt'),
+    views   => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'html.tt'),
+    base    => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'base.tt'),
   };
 
-  return $config->{ $params{class} };
+  return read_file($config->{ $params{class} });
 }
 
 sub _format_code_and_remove_bak_files {
