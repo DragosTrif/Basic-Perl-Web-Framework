@@ -3,7 +3,6 @@ use warnings;
 
 package SinglePageAplication;
 
-use Data::Dumper;
 use File::Path qw(make_path);
 use File::Spec;
 use Carp qw(croak carp);
@@ -47,8 +46,6 @@ sub generate_files {
 
   my $file_name = $self->{class_names};
   $self->{file_path}->{psgi} = $self->{name};  
-  print Dumper($self->{file_path});
-
 
   foreach my $path ( keys %{ $self->{file_path} } ) {
     my $exetension = 'pm';
