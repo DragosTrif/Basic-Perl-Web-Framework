@@ -1,0 +1,15 @@
+use strict;
+use warnings;
+
+use Plack::Builder;
+use Plack::Request;
+
+use lib 'Controller';
+use [% controller_path %];
+
+
+builder {
+[% FOREACH m IN methods %]
+  [% m.body %]
+[% END %] 
+};

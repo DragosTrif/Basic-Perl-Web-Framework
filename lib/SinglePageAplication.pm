@@ -38,6 +38,7 @@ sub _initialize {
   $self->{class_names}->{controllers} = sprintf( "Render%s", $self->{name} );
   $self->{class_names}->{views}       = 'main';
   $self->{class_names}->{base}        = 'BaseRenderer';
+  $self->{class_names}->{psgi}        = 'app';
   $self->{ConfigTemplates}            = 'ConfigTemplates';
 }
 
@@ -45,11 +46,19 @@ sub generate_files {
   my $self = shift;
 
   my $file_name = $self->{class_names};
+  $self->{file_path}->{psgi} = $self->{name};  
+  print Dumper($self->{file_path});
+
 
   foreach my $path ( keys %{ $self->{file_path} } ) {
     my $exetension = 'pm';
+    
     $exetension = 'tt'
       if $path eq 'views';
+    
+    $exetension = 'psgi'
+      if $path eq 'psgi';
+
     my $file = File::Spec->catdir( $self->{file_path}->{$path},
       "$file_name->{$path}.$exetension" );
 
@@ -106,6 +115,7 @@ sub _get_method_code {
     render_say_hello => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'render_say_hello.tt'),
     dispatch         => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'dispatch.tt'),
     _render_template => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'render_template.tt'),
+    mount            => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'mount.tt'),
   };
 
   my $code = read_file($config->{ $params{code} });
@@ -121,9 +131,7 @@ sub generate_class_code {
     app => {
       class           => sprintf( '%s::%s', 'Controller', $self->{name} ),
       superclass      => 'BaseRenderer',
-      superclass_path => 'lib1',
       modell      => $self->{class_names}->{modells},
-      modell_path => $self->{file_path}->{modells},
       attributes  => [
         {
           name    => '+views',
@@ -175,6 +183,14 @@ sub generate_class_code {
           body => $self->_get_method_code( code => '_render_template' )
         }
       ]
+    },
+    psgi => {
+      #class      => 'BaseRenderer',
+      controller_path => $self->{class_names}->{app},
+      methods => [
+        {
+          body => $self->_get_method_code( code => 'mount' )
+        }],
     }
   };
 
@@ -194,6 +210,7 @@ sub _get_class_template_input {
     modells => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'model.tt'),
     views   => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'html.tt'),
     base    => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'base.tt'),
+    psgi    => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'app.tt'),
   };
 
   return read_file($config->{ $params{class} });

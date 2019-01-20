@@ -1,0 +1,10 @@
+ mount '/' => sub {
+    my $env= shift;
+    my $request = Plack::Request->new($env);
+    
+    my $response = $request->new_response(200);
+    $response->content_type('text/html');
+    $response->content($request->param('name'), "\n");
+    return $response->finalize;
+
+  };
