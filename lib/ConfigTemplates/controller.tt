@@ -1,9 +1,11 @@
+package [% class %];
+
 use Moo;
 
-use lib "[% superclass_path %]";
+use lib "Lib";
 extends "[% superclass %]";
 
-use lib "[% modell_path %]";
+use lib "Modell";
 use [% modell %];
 
 [% FOREACH a IN attributes %]
@@ -19,4 +21,3 @@ sub [% m.name %] {
 __PACKAGE__->meta->make_immutable;
 
 1;
-Class
