@@ -4,6 +4,6 @@ my $params = shift;
 $self->_render_template(
   "main.tt",
   {
-    hello => $self->say_hello(),
+    hello => $self->DataHandler()->say_hello(name => $params->{name}),
   }
 );

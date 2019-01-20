@@ -129,13 +129,13 @@ sub generate_class_code {
 
   my $class_config = {
     app => {
-      class           => sprintf( '%s::%s', 'Controller', $self->{name} ),
+      class           => $self->{name},
       superclass      => 'BaseRenderer',
       modell      => $self->{class_names}->{modells},
       attributes  => [
         {
           name    => '+views',
-          default => sprintf( "'%s'", $self->{file_path}->{views} )
+          default => sprintf( "'%s'", 'Templates' ),
         },
         { name => 'DataHandler', default => 'DataHandler->new()' }
       ],

@@ -1,5 +1,16 @@
-<form>
-<input type="text" name="name" value="Mickey">
-<input type="hidden" name="action" value="render_say_hello">
-<input type="submit" value="Submit">
-<form>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>"hello world"</title>
+    <title>Landy - Parallax App Landing Page</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <form>
+      <input type="text" name="name" value="Mickey">
+      <input type="hidden" name="action" value="render_say_hello">
+      <input type="submit" value="Submit">
+    </form>
+    <p>add TT var 'hello' here</p>
+  </body>
+</html>

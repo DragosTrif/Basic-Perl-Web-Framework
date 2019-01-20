@@ -11,5 +11,18 @@ use [% controller_path %];
 builder {
 [% FOREACH m IN methods %]
   [% m.body %]
-[% END %] 
+[% END %]
 };
+
+
+sub load_params {
+  my $request = shift;
+
+  my %params;
+
+  foreach  my $param (sort $request->param()) {
+    $params{$param} = $request->param($param);
+  }
+
+  return \%params;
+}

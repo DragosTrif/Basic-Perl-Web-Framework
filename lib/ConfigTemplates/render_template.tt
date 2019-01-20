@@ -3,6 +3,7 @@ my $file = shift;
 my $vars = shift;
 
 my $folder = $self->views();
+my $output;
 
 my $tt = Template->new({
   INCLUDE_PATH => "$folder",
@@ -11,4 +12,6 @@ my $tt = Template->new({
 
 my $tempate_code = read_file("$folder/$file");
 
-$tt->process(\$tempate_code, $vars) // die $Template::ERROR;
+$tt->process(\$tempate_code, $vars, \$output) // die $Template::ERROR;
+
+return $output;
