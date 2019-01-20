@@ -45,8 +45,7 @@ sub generate_files {
   my $self = shift;
 
   my $file_name = $self->{class_names};
-  $self->{file_path}->{psgi} = $self->{name};  
-
+   
   foreach my $path ( keys %{ $self->{file_path} } ) {
     my $exetension = 'pm';
     
@@ -97,6 +96,7 @@ sub _generate_file_path_name {
     modells => File::Spec->catdir( $app_name, 'Modell' ),
     views   => File::Spec->catdir( $app_name, $views_dir ),
     base    => File::Spec->catdir( $app_name, $base_class_dir ),
+    psgi    => $self->{name},
   };
 
   return $config;
