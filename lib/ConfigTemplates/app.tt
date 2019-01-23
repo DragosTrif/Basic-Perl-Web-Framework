@@ -3,6 +3,7 @@ use warnings;
 
 use Plack::Builder;
 use Plack::Request;
+use HTML::Entities 'encode_entities';
 
 use lib 'Controller';
 use [% controller_path %];
@@ -21,7 +22,7 @@ sub load_params {
   my %params;
 
   foreach  my $param (sort $request->param()) {
-    $params{$param} = $request->param($param);
+    $params{encode_entities($param)} = encode_entities($request->param($param));
   }
 
   return \%params;
