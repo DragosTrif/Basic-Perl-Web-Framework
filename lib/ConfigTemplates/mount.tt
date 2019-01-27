@@ -6,9 +6,6 @@
     my $controller = [% controller_path %]->new();
     my $content = $controller->dispatch($params);
     
-    my $response = $request->new_response(200);
-    $response->content_type('text/html');
-    $response->content($content);
-    return $response->finalize;
+    return response($request, $content);
 
   };

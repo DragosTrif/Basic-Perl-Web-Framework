@@ -27,3 +27,13 @@ sub load_params {
 
   return \%params;
 }
+
+sub response {
+  my ($request, $content) = @_;
+  
+  my $response = $request->new_response(200);
+  
+  $response->content_type('text/html');
+  $response->content($content);
+  return $response->finalize;
+}
