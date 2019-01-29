@@ -1,0 +1,7 @@
+
+  my $self = shift;
+  my $perl_data = shift;
+
+  my $json = JSON->new();
+
+  return  $json->pretty->encode( $perl_data );

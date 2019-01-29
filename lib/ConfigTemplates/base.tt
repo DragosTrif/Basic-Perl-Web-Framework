@@ -4,6 +4,7 @@ use Moo;
 
 use Template;
 use File::Slurp 'read_file';
+use JSON;
 
 [% FOREACH a IN attributes %]
 has [% a.name %] => (is => "ro", default => sub {[% a.default %]});

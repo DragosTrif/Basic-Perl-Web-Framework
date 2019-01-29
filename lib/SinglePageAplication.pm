@@ -113,6 +113,7 @@ sub _get_method_code {
     dispatch         => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'dispatch.tt'),
     _render_template => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'render_template.tt'),
     mount            => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'mount.tt'),
+    _respond_as_josn => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, '_respond_as_josn.tt'),
   };
 
   my $code = read_file($config->{ $params{code} });
@@ -178,6 +179,10 @@ sub generate_class_code {
         {
           name => '_render_template',
           body => $self->_get_method_code( code => '_render_template' )
+        },
+        {
+          name => '_respond_as_josn',
+           body => $self->_get_method_code( code => '_respond_as_josn' )
         }
       ]
     },
