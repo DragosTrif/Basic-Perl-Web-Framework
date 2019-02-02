@@ -1,0 +1,7 @@
+my $self = shift;
+
+
+  $self->_respond_as_josn({ 
+    name      => 'Dragos',
+    last_name => 'Trif',
+  });
