@@ -7,5 +7,5 @@ This script generates a basic Web-Framework which follows Model-view-controller 
 2. Add some tests.
 
 #Info#
-test give_me_json method with this commnad:
+1. test give_me_json method with this commnad:
 curl -X GET 'http://localhost:5000/?content_type='aplication/json'&action=give_me_json'
