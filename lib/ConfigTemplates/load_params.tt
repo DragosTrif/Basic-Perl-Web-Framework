@@ -1,0 +1,11 @@
+
+  my $request = shift;
+
+  my %params;
+
+  foreach my $param ( sort $request->param() ) {
+    $params{ encode_entities($param) } =
+      encode_entities( $request->param($param) );
+  }
+
+  return \%params;

@@ -1,0 +1,12 @@
+
+  my %params = @_;
+
+  my $request = $params{request};
+  my $content = $params{content};
+  my $type    = $params{content_type};
+
+  my $response = $request->new_response(200);
+
+  $response->content_type($type);
+  $response->content($content);
+  return $response->finalize;

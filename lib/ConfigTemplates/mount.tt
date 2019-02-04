@@ -1,15 +1,4 @@
- mount '/' => sub {
-    my $env= shift;
-    my $request = Plack::Request->new($env);
-
-    my $params = load_params($request);
-    my $controller = [% controller_path %]->new();
-    my $content = $controller->dispatch($params);
-    
-    return response( 
-      request      => $request, 
-      content      => $content,
-      content_type => 'text/html',
-     );
-
+ mount '/' => builder {
+    enable $plugins->{AUTHORIZATION}->();
+    $apps->{test2}; 
   };

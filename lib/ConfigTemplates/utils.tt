@@ -1,0 +1,12 @@
+package Utils;
+
+use Exporter::NoWork;
+use HTML::Entities 'encode_entities';
+
+[% FOREACH m IN methods %]
+sub [% m.name %] {
+[% m.body %]
+}
+[% END %]
+
+1;

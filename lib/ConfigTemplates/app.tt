@@ -3,10 +3,33 @@ use warnings;
 
 use Plack::Builder;
 use Plack::Request;
-use HTML::Entities 'encode_entities';
+use Plack::Session;
 
-use lib 'Controller';
-use [% controller_path %];
+use lib ('Controller', 'Lib');
+use Utils qw(load_params response load_plugins);
+
+use test2;
+
+my $plugins = load_plugins(); 
+
+my $apps = {
+  test2 => sub {
+    my $env     = shift;
+    my $request = Plack::Request->new($env);
+    my $session = Plack::Session->new($env);
+
+    my $params     = load_params($request);
+    my $controller = test2->new();
+    my $content    = $controller->dispatch($params);
+
+    return response(
+      request      => $request,
+      content      => $content,
+      content_type => 'text/html',
+    );
+
+  },
+};
 
 
 builder {
@@ -16,28 +39,3 @@ builder {
 };
 
 
-sub load_params {
-  my $request = shift;
-
-  my %params;
-
-  foreach  my $param (sort $request->param()) {
-    $params{encode_entities($param)} = encode_entities($request->param($param));
-  }
-
-  return \%params;
-}
-
-sub response {
-  my %params = @_;
-  
-  my $request = $params{request};
-  my $content = $params{content};
-  my $type    = $params{content_type};
-
-  my $response = $request->new_response(200);
-
-  $response->content_type($type);
-  $response->content($content);
-  return $response->finalize;
-}

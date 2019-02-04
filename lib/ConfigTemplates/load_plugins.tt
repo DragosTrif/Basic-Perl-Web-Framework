@@ -1,0 +1,13 @@
+
+  
+  my $plugins = {
+    AUTHORIZATION => sub {
+       "Auth::Basic", authenticator => sub {
+        my ( $username, $password ) = @_;
+
+        return $username eq 'Dragos' && $password eq 'Trif';
+      };
+    },
+  };
+
+  return $plugins;
