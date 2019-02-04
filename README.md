@@ -9,5 +9,5 @@ This script generates a basic Web-Framework which follows Model-view-controller 
 #Info#
 1. test give_me_json method with this command:
 ```
-curl -X GET 'http://localhost:5000/?action=give_me_json'
+curl -u Dragos:Trif 'http://localhost:5000/?action=give_me_json'
 ```
