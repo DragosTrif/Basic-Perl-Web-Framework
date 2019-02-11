@@ -1,7 +1,7 @@
 my $self = shift;
 
 
-  $self->_respond_as_josn({ 
+  $self->_respond_as_json({ 
     name      => 'Dragos',
     last_name => 'Trif',
   });
