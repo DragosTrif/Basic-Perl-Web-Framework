@@ -14,7 +14,8 @@ use [% class %];
 my $plugins = load_plugins(); 
 
 my $apps = {
-  test2 => sub {
+  [% class %]
+   => sub {
     my $env     = shift;
     my $request = Plack::Request->new($env);
     my $session = Plack::Session->new($env);

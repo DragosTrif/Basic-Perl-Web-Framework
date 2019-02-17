@@ -3,5 +3,5 @@
   
  mount '/' => builder {
     enable $plugins->{AUTHORIZATION}->();
-    $apps->{test2}; 
+    $apps->{[% class %]}; 
   };
