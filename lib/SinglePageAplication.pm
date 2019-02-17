@@ -54,23 +54,6 @@ sub generate_files {
   foreach my $path ( keys %{ $self->{file_path} } ) {
     my $extension = $self->_set_file_extension( extension => $path );
 
-    #'pm';
-    # # clean this with set_file_extension()
-    # $exetension = 'tt'
-    #   if $path eq 'views';
-
-    # $exetension = 'psgi'
-    #   if $path eq 'psgi';
-
-    # $exetension = 'css'
-    #   if $path eq 'css';
-
-    # $exetension = 'js'
-    #  if $path eq 'js';
-
-    # $exetension  = 'html'
-    #   if $path eq 'layout' ||  $path eq 'footer';
-
     my $file = File::Spec->catdir( $self->{file_path}->{$path},
       "$file_name->{$path}.$extension" );
 
