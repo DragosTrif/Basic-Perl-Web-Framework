@@ -4,11 +4,12 @@ use warnings;
 use Plack::Builder;
 use Plack::Request;
 use Plack::Session;
+use Plack::App::File;
 
 use lib ('Controller', 'Lib');
 use Utils qw(load_params response load_plugins);
 
-use test2;
+use [% class %];
 
 my $plugins = load_plugins(); 
 
@@ -19,7 +20,7 @@ my $apps = {
     my $session = Plack::Session->new($env);
 
     my $params     = load_params($request);
-    my $controller = test2->new();
+    my $controller = [% class %]->new();
     my $content    = $controller->dispatch($params);
 
     return response(
