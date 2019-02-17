@@ -1,3 +1,6 @@
+ mount "/js"  => Plack::App::File->new(file  => './Templates/static/js/script.js');
+  mount "/css" => Plack::App::File->new(file  => './Templates/static/css/style.css');
+  
  mount '/' => builder {
     enable $plugins->{AUTHORIZATION}->();
     $apps->{test2}; 
