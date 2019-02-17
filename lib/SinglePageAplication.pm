@@ -52,33 +52,35 @@ sub generate_files {
   my $file_name = $self->{class_names};
 
   foreach my $path ( keys %{ $self->{file_path} } ) {
-    my $exetension = 'pm';
-    # clean this with set_file_extension()
-    $exetension = 'tt'
-      if $path eq 'views';
+    my $extension = $self->_set_file_extension( extension => $path );
 
-    $exetension = 'psgi'
-      if $path eq 'psgi';
-    
-    $exetension = 'css'
-      if $path eq 'css';
+    #'pm';
+    # # clean this with set_file_extension()
+    # $exetension = 'tt'
+    #   if $path eq 'views';
 
-    $exetension = 'js' 
-     if $path eq 'js';
+    # $exetension = 'psgi'
+    #   if $path eq 'psgi';
 
-    $exetension  = 'html' 
-      if $path eq 'layout' ||  $path eq 'footer';
+    # $exetension = 'css'
+    #   if $path eq 'css';
+
+    # $exetension = 'js'
+    #  if $path eq 'js';
+
+    # $exetension  = 'html'
+    #   if $path eq 'layout' ||  $path eq 'footer';
 
     my $file = File::Spec->catdir( $self->{file_path}->{$path},
-      "$file_name->{$path}.$exetension" );
+      "$file_name->{$path}.$extension" );
 
-    
     open( my $fh, '>', $file );
     print $fh $self->generate_class_code( class => $path );
     close $fh;
+
     # this can a be a simple sub
     $self->_format_code_and_remove_bak_files( file => $file )
-      if $exetension eq 'pm' || $exetension eq 'psgi';
+      if $extension eq 'pm' || $extension eq 'psgi';
   }
 
 }
@@ -91,7 +93,7 @@ sub create_file_path {
   foreach my $file_path ( keys %{$config} ) {
     print "Generating dir $config->{$file_path}\n"
       if $file_path ne 'utils';
-   
+
     make_path( $config->{$file_path} )
       if !-d $config->{$file_path};
   }
@@ -109,7 +111,6 @@ sub _generate_file_path_name {
   my $base_class_dir = 'Lib';
   my $layout         = 'layout';
 
-  
   my $config = {
     app     => File::Spec->catdir( $app_name, $dir ),
     modells => File::Spec->catdir( $app_name, 'Modell' ),
@@ -117,10 +118,10 @@ sub _generate_file_path_name {
     base    => File::Spec->catdir( $app_name, $base_class_dir ),
     utils   => File::Spec->catdir( $app_name, $base_class_dir ),
     psgi    => $self->{name},
-    css     => File::Spec->catdir( $app_name, $views_dir, $static, $css ),
-    js      => File::Spec->catdir( $app_name, $views_dir, $static, $js ),
-    layout  => File::Spec->catdir( $app_name, $views_dir, $static, $layout ),
-    footer  => File::Spec->catdir( $app_name, $views_dir, $static, $layout ),
+    css    => File::Spec->catdir( $app_name, $views_dir, $static, $css ),
+    js     => File::Spec->catdir( $app_name, $views_dir, $static, $js ),
+    layout => File::Spec->catdir( $app_name, $views_dir, $static, $layout ),
+    footer => File::Spec->catdir( $app_name, $views_dir, $static, $layout ),
   };
 
   return $config;
@@ -168,7 +169,7 @@ sub _get_method_code {
 sub generate_class_code {
   my $self   = shift;
   my %params = (@_);
-  
+
   my $class_config = {
     app => {
       class      => $self->{name},
@@ -236,7 +237,7 @@ sub generate_class_code {
     },
     psgi => {
 
-      class      => "$self->{name}",
+      class           => "$self->{name}",
       controller_path => $self->{class_names}->{app},
       methods         => [
         {
@@ -273,23 +274,41 @@ sub generate_class_code {
 sub _get_class_template_input {
   my $self   = shift;
   my %params = (@_);
-  
+
   my $config = {
     app =>
       File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'controller.tt' ),
     modells =>
       File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'model.tt' ),
-    views     => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'html.tt' ),
-    base      => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'base.tt' ),
-    psgi      => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'app.tt' ),
-    utils     => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'utils.tt' ),
-    css       => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'css.tt' ),
-    js        => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'js.tt' ),
-    layout    => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'layout.tt' ),
-    footer    => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'footer.tt' ),
+    views => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'html.tt' ),
+    base  => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'base.tt' ),
+    psgi  => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'app.tt' ),
+    utils => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'utils.tt' ),
+    css   => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'css.tt' ),
+    js    => File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'js.tt' ),
+    layout =>
+      File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'layout.tt' ),
+    footer =>
+      File::Spec->catdir( 'lib', $self->{ConfigTemplates}, 'footer.tt' ),
   };
 
   return read_file( $config->{ $params{class} } );
+}
+
+sub _set_file_extension {
+  my $self   = shift;
+  my %params = (@_);
+
+  my $extension_config = {
+    views  => 'tt',
+    psgi   => 'psgi',
+    css    => 'css',
+    js     => 'js',
+    layout => 'html',
+    footer => 'html',
+  };
+
+  return $extension_config->{ $params{extension} } // 'pm';
 }
 
 sub _format_code_and_remove_bak_files {
