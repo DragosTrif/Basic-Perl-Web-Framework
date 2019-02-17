@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="/js"></script>
+  <link rel="stylesheet" type="text/css" href="/css">
+</head>
+<body>
+  <table>
+  <tr>
+    <th>This</th>
+    <th>tabel</th>
+    <th>loads</th>
+  </tr>
+  <tr>
+    <td>some cool css</td>
+    <td>with</td>
+    <td>Plack::App::File</td>
+  </tr>
+</table>
+<br>
+<br>
