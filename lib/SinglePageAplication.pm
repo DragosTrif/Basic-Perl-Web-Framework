@@ -34,7 +34,7 @@ sub _initialize {
   $self->{tt}                     = Template::Tiny->new( TRIM => 1, );
   $self->{class_names}->{app}     = $self->{name};
   $self->{class_names}->{modells} = 'DataHandler';
-  $self->{class_names}->{controllers} = sprintf( "Render%s", $self->{name} );
+  $self->{class_names}->{controllers} = $self->{name};
   $self->{class_names}->{views}       = 'main';
   $self->{class_names}->{base}        = 'BaseRenderer';
   $self->{class_names}->{psgi}        = 'app';
