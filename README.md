@@ -11,7 +11,5 @@ The building blocks for this project are:
 1. Add some tests.
 
 #Info#
-1. test give_me_json method with this command:
-```
-curl -u Dragos:Trif 'http://localhost:5000/?action=give_me_json'
-```
+You can find the code base for a small here
+[sample app](https://github.com/DragosTrif/Sample-app-for-my-Basic-Perl-WebFramework)
